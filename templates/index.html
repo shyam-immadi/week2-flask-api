@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>caliculator</title>
+    
+    <link rel="stylesheet" href="{{url_for('static',filename='index.css')}}">
+</head>
+<body>
+    <div class="wrapper">
+        <h2 class="title"> Caliculator Api</h2>
+        <form  id="calci-form">
+            <div class="input">
+                <input type="number" id="var1" placeholder="Enter first number">
+            </div>
+            <div class="input">
+                <input type="number" id="var2" placeholder="Enter second number">
+            </div>
+            
+            <div class="input2">
+                <select  id="operation">
+                    <option value="select operation" hidden>select operation</option>
+                    <option value="add">add</option>
+                    <option value="subtract">subtract</option>
+                    <option value="multiply">multiply</option>
+                    <option value="divide">divide</option>
+                </select>
+                <button type="submit" id="btn" value="submit" >Caliculate</button>
+            </div>
+            
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('calci-form').addEventListener("submit",(e)=>{
+            e.preventDefault();
+
+            const var1 = parseFloat(document.getElementById('var1').value);
+            const var2 = parseFloat(document.getElementById('var2').value);
+            const operation = document.getElementById("operation").value;
+            console.log(JSON.stringify({var1,var2,operation}));            
+            fetch("http://127.0.0.1:5000/perform",{
+                method : 'POST',
+                headers : {
+                    'content-type' : 'application/json',
+                },
+                body : JSON.stringify({var1,var2,operation})
+            }).then((response)=> response.json())
+            .then((data)=>{
+                console.log(data)
+                document.getElementById("result").innerHTML = "Answer is : " + data.result;
+            })
+            .catch( error => console.log("error occured",error));
+        });
+    </script>
+            
+    
+            
+        
+    
+        
+    
+</body>
+</html>
